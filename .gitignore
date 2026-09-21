@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.exe
+*.dll
+dist/
+*.build/
+*.dist/
+*.onefile-build/
+config.json
+auto-py-to-exe-master/

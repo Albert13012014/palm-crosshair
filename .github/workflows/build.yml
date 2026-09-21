@@ -1,0 +1,59 @@
+name: Build Crosshair
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install nuitka keyboard pywin32 pystray pillow
+    
+    - name: Build Windows executable
+      run: |
+        python -m nuitka --onefile --standalone --assume-yes-for-downloads --enable-plugin=tk-inter --windows-console-mode=disable --windows-icon-from-ico="icon.ico" --output-filename="Palm Crosshair.exe" main.py
+    
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Palm-Crosshair-Windows
+        path: Palm Crosshair.exe
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install nuitka pynput pystray pillow
+    
+    - name: Build macOS app
+      run: |
+        python -m nuitka --onefile --standalone --assume-yes-for-downloads --enable-plugin=tk-inter --macos-create-app-bundle --output-filename="Palm Crosshair" main.py
+    
+    - name: Upload macOS artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Palm-Crosshair-macOS
+        path: Palm Crosshair.app
