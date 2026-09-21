@@ -183,38 +183,30 @@ class CrosshairOverlay:
         self.setup_tray()
 
     def setup_tray(self):
-        def create_tray():
-            try:
-                if os.path.exists(ICON_PATH):
-                    icon_image = Image.open(ICON_PATH)
-                else:
-                    icon_image = Image.new('RGB', (64, 64), color='white')
-                
-                menu = pystray.Menu(
-                    pystray.MenuItem("Настройки", self.show_settings, default=True),
-                    pystray.Menu.SEPARATOR,
-                    pystray.MenuItem("Закрыть", self.quit_app)
-                )
-                
-                self.tray_icon = pystray.Icon("crosshair", icon_image, "Crosshair Overlay", menu)
-                self.tray_icon.run()
-            except Exception as e:
-                print(f"Tray error: {e}")
+        if os.path.exists(ICON_PATH):
+            icon_image = Image.open(ICON_PATH)
+        else:
+            icon_image = Image.new('RGB', (64, 64), color='white')
+        
+        menu = pystray.Menu(
+            pystray.MenuItem("Настройки", self.show_settings, default=True),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem("Закрыть", self.quit_app)
+        )
+        
+        self.tray_icon = pystray.Icon("crosshair", icon_image, "Crosshair Overlay", menu)
         
         import threading
-        tray_thread = threading.Thread(target=create_tray, daemon=True)
+        tray_thread = threading.Thread(target=self.tray_icon.run, daemon=True)
         tray_thread.start()
 
     def show_settings(self, icon=None, item=None):
         if self.settings_win:
-            self.settings_win.win.deiconify()
-            self.settings_win.win.lift()
+            self.root.after(0, self.settings_win.win.deiconify)
+            self.root.after(0, self.settings_win.win.lift)
 
     def quit_app(self, icon=None, item=None):
-        save_config(self.cfg)
-        if self.tray_icon:
-            self.tray_icon.stop()
-        self.root.quit()
+        self.root.after(0, self.save_and_exit)
 
     def update_geometry(self):
         x = self.cfg["x"] - self.win_size // 2

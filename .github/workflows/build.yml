@@ -48,12 +48,40 @@ jobs:
         python -m pip install --upgrade pip
         pip install nuitka pynput pystray pillow
     
-    - name: Build macOS app
+    - name: Build macOS executable
       run: |
-        python -m nuitka --onefile --standalone --assume-yes-for-downloads --enable-plugin=tk-inter --macos-create-app-bundle --output-filename="Palm Crosshair" main.py
+        python -m nuitka --onefile --standalone --assume-yes-for-downloads --enable-plugin=tk-inter --output-filename="Palm Crosshair" main.py
+    
+    - name: Create .app bundle
+      run: |
+        mkdir -p "Palm Crosshair.app/Contents/MacOS"
+        mkdir -p "Palm Crosshair.app/Contents/Resources"
+        cp Palm\ Crosshair "Palm Crosshair.app/Contents/MacOS/"
+        cat > "Palm Crosshair.app/Contents/Info.plist" << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>CFBundleExecutable</key>
+            <string>Palm Crosshair</string>
+            <key>CFBundleName</key>
+            <string>Palm Crosshair</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.palm.crosshair</string>
+            <key>CFBundleVersion</key>
+            <string>1.0</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>10.13</string>
+        </dict>
+        </plist>
+        EOF
     
     - name: Upload macOS artifact
       uses: actions/upload-artifact@v4
       with:
         name: Palm-Crosshair-macOS
-        path: Palm Crosshair.app
+        path: |
+          Palm Crosshair
+          Palm Crosshair.app
