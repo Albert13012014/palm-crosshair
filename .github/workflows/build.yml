@@ -57,26 +57,28 @@ jobs:
         mkdir -p "Palm Crosshair.app/Contents/MacOS"
         mkdir -p "Palm Crosshair.app/Contents/Resources"
         cp "Palm Crosshair" "Palm Crosshair.app/Contents/MacOS/"
-        cat > "Palm Crosshair.app/Contents/Info.plist" << EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>CFBundleExecutable</key>
-    <string>Palm Crosshair</string>
-    <key>CFBundleName</key>
-    <string>Palm Crosshair</string>
-    <key>CFBundleIdentifier</key>
-    <string>com.palm.crosshair</string>
-    <key>CFBundleVersion</key>
-    <string>1.0</string>
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-    <key>LSMinimumSystemVersion</key>
-    <string>10.13</string>
-</dict>
-</plist>
-EOF
+        cat > "Palm Crosshair.app/Contents/Info.plist" << 'PLIST'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>CFBundleExecutable</key>
+            <string>Palm Crosshair</string>
+            <key>CFBundleName</key>
+            <string>Palm Crosshair</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.palm.crosshair</string>
+            <key>CFBundleVersion</key>
+            <string>1.0</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>10.13</string>
+            <key>NSHighResolutionCapable</key>
+            <true/>
+        </dict>
+        </plist>
+        PLIST
     
     - name: Upload macOS artifact
       uses: actions/upload-artifact@v4
