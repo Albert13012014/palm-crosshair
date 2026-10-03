@@ -62,7 +62,7 @@ jobs:
     
     - name: Build macOS app
       run: |
-        python -m nuitka --onefile --mode=app --assume-yes-for-downloads --enable-plugin=pyqt5 --macos-app-icon=icon.icns --output-filename="Palm Crosshair" main_qt.py
+        python -m nuitka --mode=app --assume-yes-for-downloads --enable-plugin=pyqt5 --macos-app-icon=icon.icns --output-filename="Palm Crosshair" main_qt.py
 
     - name: Create app bundle fallback
       run: |
